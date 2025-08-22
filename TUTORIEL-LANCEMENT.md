@@ -98,7 +98,7 @@ imagink-workspace/
 
 ### **4.1 Exporter le token Infisical (placeholder)**
 ```bash
-export INFISICAL_TOKEN=st.xxxxxx.yyyyy.zzzzz   # remplacez par votre token
+export INFISICAL_TOKEN=st.6dd1c369-8bd2-4f93-bc7d-b5adeda02aba.3fec49bda5db70e93aa2a7fc68ae6700.6f5ad13e4e8c6999dc9603e0ce99fcda   
 ```
 
 ### **4.2 Lancer l'init DB**
@@ -125,7 +125,7 @@ export INFISICAL_TOKEN=st.xxxxxx.yyyyy.zzzzz   # remplacez par votre token
 🎉 Base configurée avec succès sur Supabase !
 ```
 
-**Note :** l'option Infisical `--path=/Bdd-service` doit correspondre à votre organisation de secrets (chemin du service).
+**Note :** l'option Infisical `--path=/bdd` doit correspondre à votre organisation de secrets (chemin du service).
 
 ---
 
@@ -231,9 +231,9 @@ kill -9 <PID>
 
 ### **Secrets non injectés (DATABASE_URL manquant)**
 ```bash
-export INFISICAL_TOKEN=st.xxxxxx.yyyyy.zzzzz
+export INFISICAL_TOKEN=st.6dd1c369-8bd2-4f93-bc7d-b5adeda02aba.3fec49bda5db70e93aa2a7fc68ae6700.6f5ad13e4e8c6999dc9603e0ce99fcda
 # Test rapide d'injection :
-infisical run --env=dev --path=/Bdd-service -- env | grep '^DATABASE_URL='
+infisical run --env=dev --path=/bdd -- env | grep '^DATABASE_URL='
 ```
 
 ### **DB non accessible / schéma KO**
@@ -258,7 +258,7 @@ chmod +x scripts/*.sh
 ./scripts/install-deps.sh
 
 # 3) Initialiser la base (via Infisical)
-export INFISICAL_TOKEN=st.xxxxxx.yyyyy.zzzzz
+export INFISICAL_TOKEN=st.6dd1c369-8bd2-4f93-bc7d-b5adeda02aba.3fec49bda5db70e93aa2a7fc68ae6700.6f5ad13e4e8c6999dc9603e0ce99fcda
 ./scripts/init-db.sh
 
 # 4) Démarrer
