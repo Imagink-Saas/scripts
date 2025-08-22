@@ -66,6 +66,8 @@ imagink-project/
 ### **📥 Étape 1 : Clonage des repositories**
 
 ```bash
+#!/bin/bash
+
 # Créer le dossier principal du projet
 mkdir imagink-project && cd imagink-project
 
@@ -100,9 +102,6 @@ echo "✅ Service Printify cloné"
 git clone https://github.com/Imagink-Saas/notifications-service.git
 echo "✅ Service Notifications cloné"
 
-# Scripts
-git clone https://github.com/Imagink-Saas/scripts.git
-
 
 # Vérifier la structure
 echo "📁 Structure du projet :"
@@ -112,6 +111,8 @@ ls -la
 ### **🔧 Étape 2 : Installation d'Infisical CLI**
 
 ```bash
+#!/bin/bash
+
 # Installer Infisical CLI globalement
 echo "🔧 Installation d'Infisical CLI..."
 npm install -g @infisical/cli
@@ -124,6 +125,8 @@ echo "✅ Infisical CLI installé avec succès !"
 ### **📦 Étape 3 : Installation des dépendances**
 
 ```bash
+#!/bin/bash
+
 # Installer les dépendances pour tous les services
 echo "📦 Installation des dépendances pour tous les services..."
 
@@ -168,6 +171,8 @@ echo "🎉 Toutes les dépendances ont été installées avec succès !"
 ### **🗄️ Étape 4 : Configuration de la base de données**
 
 ```bash
+#!/bin/bash
+
 # Initialiser la base de données PostgreSQL
 echo "🗄️  Configuration de la base de données..."
 
@@ -194,6 +199,8 @@ echo "✅ Base de données configurée avec succès !"
 ### **🚀 Étape 5 : Utilisation des scripts existants**
 
 ```bash
+#!/bin/bash
+
 # Cloner le repository des scripts
 echo "📥 Clonage du repository des scripts..."
 git clone https://github.com/Imagink-Saas/scripts.git
@@ -217,6 +224,8 @@ echo "   - Ordre de démarrage : BDD → Images → IA → Printify → Payment 
 ### **🎯 Étape 6 : Démarrage des services**
 
 ```bash
+#!/bin/bash
+
 # Démarrer tous les services avec le script existant
 echo "🚀 Démarrage de tous les services..."
 ./scripts/start-all.sh
