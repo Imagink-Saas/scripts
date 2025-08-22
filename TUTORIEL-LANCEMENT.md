@@ -1,5 +1,4 @@
-# 🚀 TUTORIEL COMPLET - LANCEMENT DU PROJET IMAGINK
-## Guide étape par étape pour démarrer tous les micro-services
+# 🚀 TUTORIEL COMPLET — LANCEMENT DU PROJET IMAGINK (Workspace propre)
 
 **Version :** 1.0.0  
 **Date :** Juillet 2025  
@@ -7,339 +6,307 @@
 
 ---
 
-## 🎯 **OBJECTIF DU TUTORIEL**
+## 🧭 **STRUCTURE CIBLE**
 
-Ce tutoriel vous guide pour lancer complètement le projet Imagink en **5 étapes simples** :
-1. 📥 Cloner le repository des scripts
-2. 🔧 Rendre les scripts exécutables
-3. 🚀 Cloner tous les services
-4. 📦 Installer les dépendances
-5. 🗄️ Initialiser la base de données
-6. 🎉 Démarrer tous les services
+```
+imagink-workspace/
+├─ scripts/                 # clone.sh, install-deps.sh, init-db.sh, start-all.sh, stop-all.sh
+└─ imagink-project/         # (créé par clone.sh) front, Bdd-service, payment-service, ...
+```
+
+**Tous les scripts se lancent depuis `imagink-workspace/` avec `./scripts/<nom>.sh`**
 
 ---
 
 ## 📋 **PRÉREQUIS**
 
-### **💻 Logiciels requis**
-- **Git** : Pour cloner les repositories
-- **Node.js** : Version 18+ LTS
-- **npm** : Gestionnaire de paquets Node.js
-- **Terminal** : Bash, Zsh, ou PowerShell
-
-### **🔑 Accès requis**
-- **GitHub** : Accès aux repositories Imagink-Saas
-- **Infisical** : Token configuré pour les variables d'environnement
+- **Git**, **Node.js 18+**, **npm**, **Bash/Zsh**
+- **WSL (Ubuntu)** si vous êtes sous Windows
+- **Accès GitHub** aux dépôts Imagink-Saas
+- **Infisical** avec un token (pour injecter DATABASE_URL et autres secrets)
 
 ---
 
 ## 🚀 **ÉTAPE 1 : CLONER LE REPOSITORY DES SCRIPTS**
 
 ```bash
-# Aller dans le dossier où vous voulez installer le projet
-cd ~/Desktop  # ou un autre dossier de votre choix
+# Créer le workspace propre puis y entrer
+mkdir -p ~/imagink-workspace && cd ~/imagink-workspace
 
-# Cloner le repository des scripts
-git clone https://github.com/Imagink-Saas/scripts.git
+# Cloner les scripts (dossier 'scripts/')
+git clone https://github.com/Imagink-Saas/scripts.git scripts
 
-# Aller dans le dossier des scripts
-cd scripts
+# Rendre exécutables
+chmod +x scripts/*.sh
 
-# Vérifier que les scripts sont présents
-ls -la
+# Vérifier
+ls -la scripts/
 ```
 
 **Résultat attendu :**
 ```
-✅ Repository scripts cloné
-📁 Contenu : clone.sh, install-deps.sh, init-db.sh, start-all.sh, stop-all.sh
+scripts/
+  clone.sh
+  install-deps.sh
+  init-db.sh
+  start-all.sh
+  stop-all.sh
 ```
 
 ---
 
-## 🔧 **ÉTAPE 2 : RENDRE LES SCRIPTS EXÉCUTABLES**
+## 🚀 **ÉTAPE 2 : CLONER TOUS LES SERVICES (dans imagink-project/)**
 
 ```bash
-# Rendre tous les scripts exécutables
-chmod +x *.sh
-
-# Vérifier les permissions
-ls -la *.sh
+./scripts/clone.sh
 ```
+
+**Ce que fait `clone.sh` :**
+- ✅ crée `imagink-project/` (frère de `scripts/`)
+- ✅ clone : `front`, `Bdd-service`, `payment-service`, `ia-service`, `image-service`, `printify-service`, `notifications-service`
 
 **Résultat attendu :**
 ```
--rwxr-xr-x  1 user  staff   clone.sh
--rwxr-xr-x  1 user  staff   install-deps.sh
--rwxr-xr-x  1 user  staff   init-db.sh
--rwxr-xr-x  1 user  staff   start-all.sh
--rwxr-xr-x  1 user  staff   stop-all.sh
+imagink-workspace/
+├─ scripts/
+└─ imagink-project/
+   ├─ front/
+   ├─ Bdd-service/
+   ├─ payment-service/
+   ├─ ia-service/
+   ├─ image-service/
+   ├─ printify-service/
+   └─ notifications-service/
 ```
 
 ---
 
-## 🚀 **ÉTAPE 3 : LANCER LE SCRIPT CLONE.SH**
+## 📦 **ÉTAPE 3 : INSTALLER LES DÉPENDANCES DE TOUS LES SERVICES**
 
 ```bash
-# Lancer le script de clonage
-./clone.sh
+./scripts/install-deps.sh
 ```
 
-**Ce que fait le script :**
-- ✅ Crée le dossier `imagink-project`
-- ✅ Clone tous les services :
-  - `front` (Next.js)
-  - `Bdd-service` (Base de données)
-  - `payment-service` (Paiements)
-  - `ia-service` (Intelligence artificielle)
-  - `image-service` (Gestion d'images)
-  - `printify-service` (E-commerce)
-  - `notifications-service` (Notifications)
-
-**Résultat attendu :**
-```
-📥 Clonage des repositories Imagink-Saas...
-✅ Frontend cloné
-✅ Service BDD cloné
-✅ Service Payment cloné
-✅ Service IA cloné
-✅ Service Images cloné
-✅ Service Printify cloné
-✅ Service Notifications cloné
-📁 Structure du projet :
-[liste des dossiers]
-```
+**Ce que fait `install-deps.sh` :**
+- ✅ entre dans `imagink-project/`
+- ✅ exécute `npm ci` dans chaque service
+- ✅ s'arrête en cas d'erreur (installation propre et reproductible)
 
 ---
 
-## 📦 **ÉTAPE 4 : LANCER LE SCRIPT INSTALL-DEPS**
+## 🗄️ **ÉTAPE 4 : INITIALISER LA BASE DE DONNÉES (Supabase + Prisma via Infisical)**
 
+### **4.1 Exporter le token Infisical (placeholder)**
 ```bash
-# Aller dans le dossier du projet
-cd imagink-project
-
-# Lancer l'installation des dépendances
-../scripts/install-deps.sh
+export INFISICAL_TOKEN=st.xxxxxx.yyyyy.zzzzz   # remplacez par votre token
 ```
 
-**Ce que fait le script :**
-- ✅ Installe les dépendances npm pour chaque service
-- ✅ Utilise `npm ci` pour une installation rapide et fiable
-- ✅ Traite tous les services séquentiellement
-
-**Résultat attendu :**
-```
-📦 Installation des dépendances pour tous les services...
-⚙️  Installation pour front...
-✅ front : OK
-⚙️  Installation pour Bdd-service...
-✅ Bdd-service : OK
-⚙️  Installation pour payment-service...
-✅ payment-service : OK
-⚙️  Installation pour ia-service...
-✅ ia-service : OK
-⚙️  Installation pour image-service...
-✅ image-service : OK
-⚙️  Installation pour printify-service...
-✅ printify-service : OK
-⚙️  Installation pour notifications-service...
-✅ notifications-service : OK
-🎉 Toutes les dépendances ont été installées avec succès !
-```
-
----
-
-## 🗄️ **ÉTAPE 5 : INITIALISER LA BASE DE DONNÉES**
-
+### **4.2 Lancer l'init DB**
 ```bash
-# Configurer le token Infisical
-export INFISICAL_TOKEN=st.6dd1c369-8bd2-4f93-bc7d-b5adeda02aba.3fec49bda5db70e93aa2a7fc68ae6700.6f5ad13e4e8c6999dc9603e0ce99fcda
-
-# Lancer l'initialisation de la base de données
-infisical run --env=dev --path=/bdd -- ../scripts/init-db.sh
+./scripts/init-db.sh
 ```
 
-**Ce que fait le script :**
-- ✅ Vérifie la présence du dossier `Bdd-service`
-- ✅ Installe les dépendances du service BDD
-- ✅ Génère le client Prisma
-- ✅ Synchronise le schéma avec Supabase
-- ✅ Teste la connexion à la base de données
+**Le script :**
+- ✅ se relance automatiquement via `infisical run` si `DATABASE_URL` n'est pas présent
+- ✅ vérifie `imagink-project/Bdd-service/prisma/schema.prisma`
+- ✅ `npm ci` + `prisma generate`
+- ✅ `prisma db push --accept-data-loss` (dev rapide) ou fallback `prisma migrate deploy`
+- ✅ test de connexion SQL via `prisma db execute`
 
-**Résultat attendu :**
+**Sortie attendue :**
 ```
 🗄️  Configuration de la base de données (Supabase + Prisma)...
 📦 Installation des dépendances npm...
-✅ Dépendances installées
 🔧 Génération du client Prisma...
-✅ Client Prisma généré
 📊 Synchronisation du schéma avec Supabase...
-✅ Schéma synchronisé avec 'prisma db push'
+✅ Schéma synchronisé
 🔍 Test de connexion à Supabase...
 ✅ Connexion OK
 🎉 Base configurée avec succès sur Supabase !
 ```
 
+**Note :** l'option Infisical `--path=/Bdd-service` doit correspondre à votre organisation de secrets (chemin du service).
+
 ---
 
-## 🎉 **ÉTAPE 6 : DÉMARRER TOUS LES SERVICES**
+## 🎉 **ÉTAPE 5 : DÉMARRER TOUS LES SERVICES**
 
 ```bash
-# Lancer le démarrage de tous les services
-../scripts/start-all.sh
+./scripts/start-all.sh
 ```
 
-**Ce que fait le script :**
-- ✅ Démarre tous les services dans des terminaux séparés
-- ✅ Respecte l'ordre de dépendances : BDD → Images → IA → Printify → Payment → Frontend
-- ✅ Utilise `npm run dev:infisical` pour chaque service
+**Démarre :** BDD → Images → IA → Printify → Payment → Notifications → Front
 
-**Résultat attendu :**
+**Sur macOS :** ouvre des onglets Terminal via `osascript`  
+**(Option Linux disponible si besoin)**
+
+**Sortie attendue :**
 ```
 🚀 Démarrage de tous les services...
--> Démarrage de bdd-services-MalicknND...
--> Démarrage de image-service-MalicknND...
--> Démarrage de service-ia-MalicknND...
--> Démarrage de printify-service-MalicknND...
--> Démarrage de payment-services-MalicknND...
--> Démarrage de front-MalicknND...
+-> Démarrage de Bdd-service...
+-> Démarrage de image-service...
+-> Démarrage de ia-service...
+-> Démarrage de printify-service...
+-> Démarrage de payment-service...
+-> Démarrage de notifications-service...
+-> Démarrage de front...
 ✅ Tous les services ont été lancés dans des terminaux séparés.
 ```
 
 ---
 
-## 🌐 **VÉRIFICATION FINALE**
+## 🔍 **ÉTAPE 6 : VÉRIFICATIONS RAPIDES**
 
-### **📊 Vérifier que tous les services sont actifs**
+### **Processus & ports**
 ```bash
-# Voir tous les processus Node.js
 ps aux | grep -E "(npm|next|node.*app)" | grep -v grep
 
-# Vérifier les ports utilisés
-lsof -i :3000  # Frontend
-lsof -i :9000  # Service IA
-lsof -i :9001  # Service Payment
-lsof -i :9002  # Service BDD
-lsof -i :5002  # Service Images
-lsof -i :3004  # Service Printify
-lsof -i :3005  # Service Notifications
+lsof -i :3000  # front
+lsof -i :9000  # ia-service
+lsof -i :9001  # payment-service
+lsof -i :9002  # Bdd-service
+lsof -i :5002  # image-service
+lsof -i :3004  # printify-service
+lsof -i :3005  # notifications-service
 ```
 
-### **🧪 Tester l'accès aux services**
+### **Ping HTTP**
 ```bash
-# Frontend
-curl http://localhost:3000
-
-# Service BDD
-curl http://localhost:9002/api/health
-
-# Service Payment
-curl http://localhost:9001/api/health
+curl -sI http://localhost:3000 | head -n 1
+curl -sI http://localhost:9002/health | head -n 1
+curl -sI http://localhost:9001/health | head -n 1
 ```
 
 ---
 
-## 🛑 **ARRÊTER TOUS LES SERVICES**
+## 🛑 **ÉTAPE 7 : ARRÊTER TOUS LES SERVICES**
 
 ```bash
-# Arrêter tous les services
-../scripts/stop-all.sh
+./scripts/stop-all.sh
 ```
 
-**Résultat attendu :**
+**Sortie attendue :**
 ```
 🛑 Arrêt de tous les services Imagink...
 🔴 Arrêt des processus Node.js...
-✅ Tous les processus des services ont été arrêtés.
+✅ Tous les processus ont été arrêtés.
 ```
 
 ---
 
-## 📝 **COMMANDES RAPIDES POUR LE DÉVELOPPEMENT**
+## 🔧 **COMMANDES UTILES (DÉVELOPPEMENT)**
 
-### **🚀 Démarrer un service spécifique**
+### **Démarrer un service à la main**
 ```bash
-# Frontend
-cd front && npm run dev:infisical
-
-# Service BDD
-cd Bdd-service && npm run dev:infisical
-
-# Service Payment
-cd payment-service && npm run dev:infisical
+cd imagink-project/front && npm run dev:infisical
+cd imagink-project/Bdd-service && npm run dev:infisical
+cd imagink-project/payment-service && npm run dev:infisical
 ```
 
-### **📊 Ouvrir Prisma Studio**
+### **Prisma Studio**
 ```bash
-cd Bdd-service && npm run db:studio
+cd imagink-project/Bdd-service && npm run db:studio
 ```
 
-### **🔧 Vérifier les logs**
+### **Logs / ports**
 ```bash
-# Voir les processus actifs
 ps aux | grep npm
-
-# Voir l'utilisation des ports
 netstat -tlnp | grep -E "(3000|9000|9001|9002|5002|3004|3005)"
 ```
 
 ---
 
-## ❌ **DÉPANNAGE RAPIDE**
+## 🆘 **DÉPANNAGE RAPIDE**
 
-### **Problème : Permission denied**
+### **Permission denied**
 ```bash
-chmod +x ../scripts/*.sh
+chmod +x scripts/*.sh
 ```
 
-### **Problème : Port déjà utilisé**
+### **Port déjà utilisé**
 ```bash
-# Voir quel processus utilise le port
 lsof -i :3000
-
-# Arrêter le processus
 kill -9 <PID>
 ```
 
-### **Problème : Dépendances manquantes**
+### **Secrets non injectés (DATABASE_URL manquant)**
 ```bash
-# Réinstaller les dépendances
-../scripts/install-deps.sh
+export INFISICAL_TOKEN=st.xxxxxx.yyyyy.zzzzz
+# Test rapide d'injection :
+infisical run --env=dev --path=/Bdd-service -- env | grep '^DATABASE_URL='
 ```
 
-### **Problème : Base de données non accessible**
+### **DB non accessible / schéma KO**
 ```bash
-# Réinitialiser la base
-infisical run --env=dev --path=/bdd -- ../scripts/init-db.sh
+./scripts/init-db.sh
+```
+
+---
+
+## 📎 **RÉSUMÉ ULTRA-COURT (CHEAT SHEET)**
+
+```bash
+# 0) Préparer le workspace
+mkdir -p ~/imagink-workspace && cd ~/imagink-workspace
+git clone https://github.com/Imagink-Saas/scripts.git scripts
+chmod +x scripts/*.sh
+
+# 1) Cloner les services
+./scripts/clone.sh
+
+# 2) Installer les dépendances
+./scripts/install-deps.sh
+
+# 3) Initialiser la base (via Infisical)
+export INFISICAL_TOKEN=st.xxxxxx.yyyyy.zzzzz
+./scripts/init-db.sh
+
+# 4) Démarrer
+./scripts/start-all.sh
+
+# 5) Arrêter
+./scripts/stop-all.sh
 ```
 
 ---
 
-## 🎯 **RÉSUMÉ DES COMMANDES COMPLÈTES**
+## 📝 **NOTES OS**
 
-```bash
-# 1. Cloner les scripts
-git clone https://github.com/Imagink-Saas/scripts.git
-cd scripts
-
-# 2. Rendre exécutables
-chmod +x *.sh
-
-# 3. Cloner tous les services
-./clone.sh
-
-# 4. Installer les dépendances
-cd imagink-project
-../scripts/install-deps.sh
-
-# 5. Initialiser la base de données
-export INFISICAL_TOKEN=st.6dd1c369-8bd2-4f93-bc7d-b5adeda02aba.3fec49bda5db70e93aa2a7fc68ae6700.6f5ad13e4e8c6999dc9603e0ce99fcda
-infisical run --env=dev --path=/bdd -- ../scripts/init-db.sh
-
-# 6. Démarrer tous les services
-../scripts/start-all.sh
-```
+- **macOS :** `start-all.sh` utilise `osascript` pour ouvrir des onglets Terminal
+- **Linux :** prévoir une version alternative (`gnome-terminal` / `xterm`)
+- **Windows :** utiliser WSL (Ubuntu) pour lancer ces scripts bash
 
 ---
+
+## 🌟 **FÉLICITATIONS !**
+
+Votre projet Imagink est maintenant complètement opérationnel dans un workspace propre ! 🎉
+
+### **✅ Structure finale :**
+```
+imagink-workspace/
+├─ scripts/                    # Scripts de gestion
+├─ imagink-project/            # Tous les services
+│  ├─ front/                  # http://localhost:3000
+│  ├─ Bdd-service/            # http://localhost:9002
+│  ├─ payment-service/        # http://localhost:9001
+│  ├─ ia-service/             # http://localhost:9000
+│  ├─ image-service/          # http://localhost:5002
+│  ├─ printify-service/       # http://localhost:3004
+│  └─ notifications-service/  # http://localhost:3005
+└─ TUTORIEL_IMAGINK.md        # Ce fichier
+```
+
+### **🌐 Prochaines étapes :**
+1. **Ouvrir** http://localhost:3000 dans votre navigateur
+2. **Tester** la génération d'images IA
+3. **Explorer** l'interface utilisateur
+4. **Développer** de nouvelles fonctionnalités
+
+---
+
+**Tutoriel généré le :** Juillet 2025  
+**Version :** 1.0.0  
+**Statut :** Workspace propre et organisé pour le projet Imagink
 
 
