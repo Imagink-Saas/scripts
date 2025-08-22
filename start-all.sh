@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Script pour démarrer tous les microservices du projet en ouvrant des terminaux séparés.
+# Script pour démarrer tous les microservices du projet en ouvrant des terminaux séparés (macOS).
+# ⚠️ Sous Linux, il faudra remplacer 'osascript' par 'gnome-terminal' ou 'xterm'.
 
 echo "🚀 Démarrage de tous les services..."
 
-# Ordre de démarrage pour gérer les dépendances (BDD > Images > IA > Printify > Payment > Frontend)
-SERVICES=("bdd-services-MalicknND" "image-service-MalicknND" "service-ia-MalicknND" "printify-service-MalicknND" "payment-services-MalicknND" "front-MalicknND")
+# Ordre de démarrage pour gérer les dépendances :
+# BDD > Images > IA > Printify > Payment > Notifications > Frontend
+SERVICES=("Bdd-service" "image-service" "ia-service" "printify-service" "payment-service" "notifications-service" "front")
 
 # Chemin de base du projet
 BASE_PATH=$(pwd)
@@ -16,12 +18,11 @@ for service in "${SERVICES[@]}"; do
     
     # Vérifier si le répertoire du service existe
     if [ -d "$SERVICE_PATH" ]; then
-        # Commande pour ouvrir un nouvel onglet de terminal et y exécuter la commande de démarrage.
-        # Le `cd` est crucial pour que `npm run dev` trouve le package.json.
+        # macOS : ouvre un nouvel onglet Terminal
         osascript -e "tell app \"Terminal\" to do script \"cd $SERVICE_PATH && echo '--- Démarrage de $service ---' && npm run dev:infisical\""
     else
         echo "⚠️  Le dossier du service $service est introuvable."
     fi
 done
 
-echo "✅ Tous les services ont été lancés dans des terminaux séparés." 
+echo "✅ Tous les services ont été lancés dans des terminaux séparés."
