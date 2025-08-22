@@ -47,7 +47,7 @@ imagink-project/
 ├── image-service/           # Service Images (Supabase)
 ├── printify-service/        # Service E-commerce (Printify)
 ├── notifications-service/   # Service Notifications (SMTP/SMS)
-└── metrics-service/         # Service Métriques (Monitoring)
+└── scripts/                 # Scripts de gestion (démarrage/arrêt)
 ```
 
 ### **🌐 Ports utilisés par défaut**
@@ -58,7 +58,6 @@ imagink-project/
 - **Service Images** : http://localhost:5002
 - **Service Printify** : http://localhost:3004
 - **Service Notifications** : http://localhost:3005
-- **Service Métriques** : http://localhost:3006
 
 ---
 
@@ -101,9 +100,6 @@ echo "✅ Service Printify cloné"
 git clone https://github.com/Imagink-Saas/notifications-service.git
 echo "✅ Service Notifications cloné"
 
-# Service Métriques
-git clone https://github.com/Imagink-Saas/metrics-service.git
-echo "✅ Service Métriques cloné"
 
 # Vérifier la structure
 echo "📁 Structure du projet :"
@@ -163,11 +159,6 @@ echo "📧 Installation des dépendances Notifications..."
 cd notifications-service && npm ci && cd ..
 echo "✅ Notifications : dépendances installées"
 
-# Service Métriques
-echo "📊 Installation des dépendances Métriques..."
-cd metrics-service && npm ci && cd ..
-echo "✅ Métriques : dépendances installées"
-
 echo "🎉 Toutes les dépendances ont été installées avec succès !"
 ```
 
@@ -197,139 +188,39 @@ cd ..
 echo "✅ Base de données configurée avec succès !"
 ```
 
-### **🚀 Étape 5 : Création des scripts de démarrage**
+### **🚀 Étape 5 : Utilisation des scripts existants**
 
 ```bash
-# Créer le script de démarrage principal
-echo "🚀 Création du script de démarrage..."
-
-cat > start-all.sh << 'EOF'
-#!/bin/bash
-echo "🚀 Démarrage de tous les services Imagink..."
-echo "⏳ Veuillez patienter pendant le démarrage..."
-
-# Démarrer le Frontend (Next.js)
-echo "🖥️  Démarrage du Frontend..."
-cd front && npm run dev:infisical &
-cd ..
-
-# Attendre un peu pour éviter les conflits de ports
-sleep 2
-
-# Démarrer le Service BDD
-echo "🗄️  Démarrage du Service BDD..."
-cd Bdd-service && npm run dev:infisical &
-cd ..
-
-sleep 2
-
-# Démarrer le Service de Paiement
-echo "💳 Démarrage du Service de Paiement..."
-cd payment-service && npm run dev:infisical &
-cd ..
-
-sleep 2
-
-# Démarrer le Service IA
-echo "🤖 Démarrage du Service IA..."
-cd ia-service && npm run dev:infisical &
-cd ..
-
-sleep 2
-
-# Démarrer le Service Images
-echo "🖼️  Démarrage du Service Images..."
-cd image-service && npm run dev:infisical &
-cd ..
-
-sleep 2
-
-# Démarrer le Service Printify
-echo "🛍️  Démarrage du Service Printify..."
-cd printify-service && npm run dev:infisical &
-cd ..
-
-sleep 2
-
-# Démarrer le Service Notifications
-echo "📧 Démarrage du Service Notifications..."
-cd notifications-service && npm run dev:infisical &
-cd ..
-
-sleep 2
-
-# Démarrer le Service Métriques
-echo "📊 Démarrage du Service Métriques..."
-cd metrics-service && npm run dev:infisical &
-cd ..
-
-echo "✅ Tous les services sont en cours de démarrage..."
-echo "📋 Ports utilisés :"
-echo "   - Frontend : http://localhost:3000"
-echo "   - Service IA : http://localhost:9000"
-echo "   - Service Payment : http://localhost:9001"
-echo "   - Service BDD : http://localhost:9002"
-echo "   - Service Images : http://localhost:5002"
-echo "   - Service Printify : http://localhost:3004"
-echo "   - Service Notifications : http://localhost:3005"
-echo "   - Service Métriques : http://localhost:3006"
-
-# Attendre que tous les services démarrent
-echo "⏳ Attente du démarrage complet..."
-sleep 10
-
-# Vérifier les processus
-echo "🔍 Vérification des processus en cours..."
-ps aux | grep -E "(npm|next|node.*app)" | grep -v grep
-
-echo "🎉 Démarrage terminé ! Tous les services devraient être accessibles."
-echo "💡 Ouvrez http://localhost:3000 dans votre navigateur pour accéder au frontend."
-EOF
-
-# Créer le script d'arrêt
-echo "🛑 Création du script d'arrêt..."
-
-cat > stop-all.sh << 'EOF'
-#!/bin/bash
-echo "🛑 Arrêt de tous les services Imagink..."
-
-# Arrêter tous les processus Node.js
-echo "🔴 Arrêt des processus Node.js..."
-pkill -f "npm run dev:infisical"
-pkill -f "next dev"
-pkill -f "node.*app.js"
-
-# Attendre un peu
-sleep 3
-
-# Vérifier qu'aucun processus ne reste
-echo "🔍 Vérification des processus restants..."
-REMAINING=$(ps aux | grep -E "(npm|next|node.*app)" | grep -v grep | wc -l)
-
-if [ $REMAINING -eq 0 ]; then
-    echo "✅ Tous les services ont été arrêtés avec succès !"
-else
-    echo "⚠️  $REMAINING processus restent actifs :"
-    ps aux | grep -E "(npm|next|node.*app)" | grep -v grep
-    echo "💡 Utilisez 'kill -9 <PID>' pour forcer l'arrêt si nécessaire."
-fi
-EOF
+# Cloner le repository des scripts
+echo "📥 Clonage du repository des scripts..."
+git clone https://github.com/Imagink-Saas/scripts.git
+echo "✅ Scripts clonés"
 
 # Rendre les scripts exécutables
-chmod +x start-all.sh stop-all.sh
+echo "🔧 Configuration des scripts..."
+chmod +x scripts/*.sh
 
-echo "✅ Scripts de démarrage et d'arrêt créés !"
+echo "✅ Scripts configurés et prêts à l'emploi !"
+echo "📝 Scripts disponibles :"
+echo "   - scripts/start-all.sh : Démarre tous les services"
+echo "   - scripts/stop-all.sh : Arrête tous les services"
+
+echo "📋 Structure des scripts :"
+echo "   - start-all.sh : Ouvre des terminaux séparés pour chaque service"
+echo "   - stop-all.sh : Arrête tous les processus sur les ports configurés"
+echo "   - Ordre de démarrage : BDD → Images → IA → Printify → Payment → Frontend"
 ```
 
 ### **🎯 Étape 6 : Démarrage des services**
 
 ```bash
-# Démarrer tous les services
+# Démarrer tous les services avec le script existant
 echo "🚀 Démarrage de tous les services..."
-./start-all.sh
+./scripts/start-all.sh
 
 echo "⏳ Attendez que tous les services démarrent..."
 echo "💡 Vous pouvez vérifier les processus avec : ps aux | grep npm"
+echo "📝 Note : Les services s'ouvrent dans des terminaux séparés sur macOS"
 ```
 
 ---
@@ -373,6 +264,19 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:9002/health 2>/dev/null 
 # Tester l'accès au service Payment
 echo "🧪 Test d'accès au service Payment..."
 curl -s -o /dev/null -w "%{http_code}" http://localhost:9001/health 2>/dev/null && echo " - Service Payment accessible" || echo " - Service Payment non accessible"
+
+### **📋 Vérification des scripts**
+```bash
+# Vérifier que les scripts sont présents et exécutables
+echo "🔍 Vérification des scripts..."
+ls -la scripts/
+
+# Vérifier le contenu des scripts
+echo "📝 Contenu du script de démarrage :"
+head -10 scripts/start-all.sh
+
+echo "📝 Contenu du script d'arrêt :"
+head -10 scripts/stop-all.sh
 ```
 
 ---
@@ -454,9 +358,6 @@ cd printify-service && npm run dev:infisical
 
 # Service Notifications
 cd notifications-service && npm run dev:infisical
-
-# Service Métriques
-cd metrics-service && npm run dev:infisical
 ```
 
 ### **📊 Monitoring des services**
@@ -465,7 +366,7 @@ cd metrics-service && npm run dev:infisical
 ps aux | grep -E "(npm|next|node.*app)" | grep -v grep
 
 # Voir l'utilisation des ports
-netstat -tlnp | grep -E "(3000|9000|9001|9002|5002|3004|3005|3006)"
+netstat -tlnp | grep -E "(3000|9000|9001|9002|5002|3004|3005)"
 
 # Voir les logs en temps réel (si disponibles)
 tail -f */logs/*.log 2>/dev/null || echo "Aucun fichier de log trouvé"
@@ -503,20 +404,9 @@ cd <service-name> && npm audit && cd ..
 - **Dépendances gérées individuellement** par service
 
 ### **🚀 Démarrage automatique**
-- **Script start-all.sh** : Démarre tous les services
-- **Script stop-all.sh** : Arrête tous les services
-- **Démarrage séquentiel** pour éviter les conflits de ports
+- **Scripts dans le dossier scripts/** : Démarrage et arrêt automatisés
+- **start-all.sh** : Démarre tous les services dans des terminaux séparés (macOS)
+- **stop-all.sh** : Arrête tous les services en fermant les processus
+- **Ordre de démarrage optimisé** : BDD → Images → IA → Printify → Payment → Frontend
 
 ---
-
-## 🎉 **FÉLICITATIONS !**
-
-Votre projet Imagink est maintenant complètement installé et configuré ! 
-
-### **✅ Ce qui a été installé :**
-- **8 micro-services** opérationnels
-- **Frontend Next.js** moderne et responsive
-- **Base de données PostgreSQL** avec Prisma
-- **Scripts de gestion** automatiques
-- **Configuration Infisical** complète
-
