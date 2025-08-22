@@ -2,8 +2,8 @@
 ## Installation de tous les micro-services depuis l'organisation GitHub
 
 **Version :** 1.0.0  
-**Date :** Décembre 2024  
-**Auteur :** MalicknND  
+**Date :** Juillet 2025
+**Auteur :** Malick Siguy NDIAYE
 **Organisation GitHub :** [Imagink-Saas](https://github.com/Imagink-Saas)
 
 ---
@@ -99,6 +99,9 @@ echo "✅ Service Printify cloné"
 # Service Notifications
 git clone https://github.com/Imagink-Saas/notifications-service.git
 echo "✅ Service Notifications cloné"
+
+# Scripts
+git clone https://github.com/Imagink-Saas/scripts.git
 
 
 # Vérifier la structure
