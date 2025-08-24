@@ -110,7 +110,7 @@ export INFISICAL_TOKEN=st.6dd1c369-8bd2-4f93-bc7d-b5adeda02aba.3fec49bda5db70e93
 ### **4.2 Lancer l'init DB**
 ```bash
 cd imagink-project
-./scripts/init-db.sh
+../scripts/init-db.sh
 ```
 
 **Le script :**
