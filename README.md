@@ -90,7 +90,7 @@ imagink-workspace/
 ## 📦 **ÉTAPE 3 : INSTALLER LES DÉPENDANCES DE TOUS LES SERVICES**
 
 ```bash
-./scripts/install-deps.sh
+cd imagink-project && ../scripts/install-deps.sh && cd ..
 ```
 
 **Ce que fait `install-deps.sh` :**
@@ -109,9 +109,7 @@ export INFISICAL_TOKEN=st.6dd1c369-8bd2-4f93-bc7d-b5adeda02aba.3fec49bda5db70e93
 
 ### **4.2 Lancer l'init DB**
 ```bash
-cd imagink-project
-../scripts/init-db.sh
-apres cd ..
+cd imagink-project && ../scripts/init-db.sh && cd ..
 ```
 
 **Le script :**
@@ -140,7 +138,7 @@ apres cd ..
 ## 🎉 **ÉTAPE 5 : DÉMARRER TOUS LES SERVICES**
 
 ```bash
-./scripts/start-all.sh
+cd imagink-project && ../scripts/start-all.sh && cd ..
 ```
 
 **Démarre :** BDD → Images → IA → Printify → Payment → Notifications → Front
@@ -190,7 +188,7 @@ curl -sI http://localhost:9001/health | head -n 1
 ## 🛑 **ÉTAPE 7 : ARRÊTER TOUS LES SERVICES**
 
 ```bash
-./scripts/stop-all.sh
+cd imagink-project && ../scripts/stop-all.sh && cd ..
 ```
 
 **Sortie attendue :**
